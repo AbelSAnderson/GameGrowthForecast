@@ -29,4 +29,6 @@ fun main() {
     //So if you actually wanted to run it for 1500 days, you could put in 3, and it will run the set of 500 3 times.
     //You can also reuse the dateController you created to run different simulations on separate growth rates, just by using the perform growth function.
     dateController.performGrowth(growthController, 2)
+
+    RealDateController().performGrowth(growthController, 2)
 }
