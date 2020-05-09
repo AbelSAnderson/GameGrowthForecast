@@ -17,7 +17,7 @@ internal class DateLeaf(growthController: GrowthController, dayAmount: Int) :
     DateUnit(growthController) {
 
     init {
-        growthData = growthController.calculateGrowth(dayAmount.toDouble())
+        val growthData = growthController.calculateGrowth(dayAmount)
         println("Growth over $dayAmount day(s): \n$growthData")
     }
 }

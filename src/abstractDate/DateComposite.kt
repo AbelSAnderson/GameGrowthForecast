@@ -44,7 +44,7 @@ internal class DateComposite(growthPeriod: MutableList<Int>, growthController: G
         }
 
         //Calculate the Growth.GrowthData for the current AbstractDate Section
-        growthData = growthController.calculateGrowth(currentGrowth)
+        val growthData = growthController.calculateGrowth(currentGrowth)
 
         println("Growth over $totalDays day(s): \n$growthData")
     }
