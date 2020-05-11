@@ -2,50 +2,47 @@ package abstractDate
 
 import growth.GrowthController
 
-class DateComposite(growthRateList: MutableList<Int>, growthController: GrowthController) :
+/**
+ * Uses the Composite Pattern to calculate growth over a set amount of time.
+ *
+ * @param growthPeriod Determines how ofter to calculate user progress over time.
+ * @param growthController Handles growth for the current time period.
+ * @author Abel Anderson
+ * @since 08/05/2020
+ *
+ * @see DateLeaf
+ */
+internal class DateComposite(growthController: GrowthController, growthPeriod: MutableList<Int>) :
     DateUnit(growthController) {
 
-    private var dateList: MutableList<DateUnit> = mutableListOf()
-
     init {
-        //Clone the List
-        val clonedList = growthRateList.toMutableList()
-
         //Get Date Information out of the GrowthRateList
-        val totalDays = clonedList.removeFirst()
-        val overflowDays = totalDays % clonedList.first()
-        val totalDayGroups = totalDays / clonedList.first()
+        val totalDays = growthPeriod.removeFirst()
+        val overflowDays = totalDays % growthPeriod.first()
+        val totalDayGroups = totalDays / growthPeriod.first()
 
         //Grab the Current Growth
-        val currentGrowth = growthController.currentGrowth()
+        val currentGrowth = growthController.currentGrowth().clone()
 
         //Loop through the Days and add them to the list
-        if (clonedList.size > 1) {
+        if (growthPeriod.size > 1) {
             for (i in 0 until totalDayGroups) {
-                dateList.add(DateComposite(clonedList, growthController))
+                DateComposite( growthController, growthPeriod)
             }
         } else {
             for (i in 0 until totalDayGroups) {
-                dateList.add(DateLeaf(growthController, clonedList.first()))
+                DateLeaf(growthController, growthPeriod.first())
             }
         }
 
         //Check for overflow
         if (overflowDays != 0) {
-            dateList.add(DateLeaf(growthController, overflowDays))
+            DateLeaf(growthController, overflowDays)
         }
 
         //Calculate the Growth.GrowthData for the current AbstractDate Section
-        growthData = growthController.calculateGrowth(currentGrowth)
+        val currencyController = growthController.calculateGrowth(currentGrowth)
 
-        println("Growth over $totalDays day(s): \n$growthData")
-    }
-
-    override fun toString(): String {
-        return ""
+        println(" --- Growth over $totalDays day(s) --- \n$currencyController")
     }
 }
-
-
-
-
