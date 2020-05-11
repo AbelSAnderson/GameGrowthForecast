@@ -1,11 +1,13 @@
 package growth
 
-class Currency(val name: String, var currentValue: Double) {
+import kotlin.math.roundToInt
+
+class Currency(val name: String, var currentValue: Double, private val showDouble: Boolean = false): Cloneable {
     var oldValue: Double = currentValue
 
     fun updateCurrency(value: Double) {
         oldValue = currentValue
-        currentValue = value
+        currentValue += value
     }
 
     fun calculateChanges(oldCurrency: Currency): Currency {
@@ -14,9 +16,21 @@ class Currency(val name: String, var currentValue: Double) {
     }
 
     override fun toString(): String {
-        return "Player $name\n" +
-                "Old Value: $oldValue" +
-                "$name(s) Gained: ${currentValue - oldValue}" +
-                "Currency Value: $currentValue"
+        if(showDouble) {
+            return "Player $name\n" +
+                    "Old Value: $oldValue\n" +
+                    "$name(s) Gained: ${currentValue - oldValue}\n" +
+                    "Currency Value: $currentValue"
+        } else {
+            return "Player $name\n" +
+                    "Old Value: ${oldValue.roundToInt()}\n" +
+                    "$name(s) Gained: ${(currentValue - oldValue).roundToInt()}\n" +
+                    "Currency Value: ${currentValue.roundToInt()}"
+        }
+
+    }
+
+    public override fun clone(): Currency {
+        return super.clone() as Currency
     }
 }

@@ -1,13 +1,12 @@
 package growth
 
-abstract class CurrencySystem(
-    private val growthExpression: GrowthExpression,
-    private val curencyPerDay: GrowthExpression,
-    val startingCurrency: Int,
-    val currency: Currency
+class CurrencySystem(
+    val currency: Currency,
+    private val growthExpression: GrowthExpression
 ) {
 
     fun calculateGrowth(currencyController: CurrencyController, days: Int) {
-
+        val newCurrencyValue = growthExpression.runCalculation(currencyController, days)
+        currency.updateCurrency(newCurrencyValue)
     }
 }

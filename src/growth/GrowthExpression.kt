@@ -1,9 +1,8 @@
 package growth
 
-import java.util.function.Function
+class GrowthExpression(private val growthFunction: (CurrencyController, Int) -> Double) {
 
-class GrowthExpression(private val growthFunction: Function<CurrencyController, Double>) {
-
-
-
+    fun runCalculation(currencyController: CurrencyController, days: Int) : Double {
+        return growthFunction(currencyController, days)
+    }
 }

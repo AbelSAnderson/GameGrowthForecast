@@ -1,21 +1,25 @@
 package growth
 
-class CurrencyController(intialAttributes: MutableList<Currency> = mutableListOf()) {
+class CurrencyController(initialCurrencies: MutableList<Currency> = mutableListOf()): Cloneable {
 
-    private val currencies: HashMap<String, Currency> = hashMapOf()
+    private var currencies: HashMap<String, Currency> = hashMapOf()
 
     init {
-        intialAttributes.forEach{
+        initialCurrencies.forEach{
             currencies[it.name] = it
         }
     }
 
-    fun getAttribute(attribute: String): Currency {
-        return currencies[attribute] ?: Currency("Error", -1.0)
+    fun getCurrency(currencyName: String): Currency {
+        return currencies[currencyName] ?: Currency("Error", -1.0)
     }
 
-    fun addAttributes(newAttributes: HashMap<String, Currency>) {
-        currencies.putAll(newAttributes)
+    fun getCurrencyValue(currencyName: String): Double {
+        return currencies[currencyName]?.currentValue ?: -1.0
+    }
+
+    fun addCurrencies(newCurrencies: HashMap<String, Currency>) {
+        currencies.putAll(newCurrencies)
     }
 
     fun calculateGrowth(oldCurrencyController: CurrencyController): CurrencyController {
@@ -33,6 +37,16 @@ class CurrencyController(intialAttributes: MutableList<Currency> = mutableListOf
             summaryString += "\n${it.value}\n"
         }
 
+
+
         return summaryString
+    }
+
+    public override fun clone(): CurrencyController {
+        val newCurrencyController = CurrencyController()
+
+        currencies.forEach { newCurrencyController.currencies[it.key] = it.value.clone() }
+
+        return newCurrencyController
     }
 }

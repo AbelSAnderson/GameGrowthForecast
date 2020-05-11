@@ -14,7 +14,7 @@ class Player(private val currencySystems: MutableList<CurrencySystem>) {
         }
 
         //Add the new attributes
-        currencyController.addAttributes(attributeList)
+        currencyController.addCurrencies(attributeList)
     }
 
     fun calculateGrowth(days: Int): CurrencyController {

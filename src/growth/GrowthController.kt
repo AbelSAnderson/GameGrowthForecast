@@ -4,7 +4,6 @@ class GrowthController(currencySystems: MutableList<CurrencySystem>) {
 
     private val player = Player(currencySystems)
 
-
     fun calculateGrowth(forDays: Int): CurrencyController {
         return player.calculateGrowth(forDays)
     }
