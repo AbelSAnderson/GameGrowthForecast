@@ -1,19 +1,19 @@
 package growth
 
-class GrowthController(experienceModifier: ExperienceModifier) {
+class GrowthController(currencySystems: MutableList<CurrencySystem>) {
 
-    private val player = Player(experienceModifier)
+    private val player = Player(currencySystems)
 
 
-    fun calculateGrowth(forDays: Double): GrowthData {
-        return player.simulateGrowth(forDays)
+    fun calculateGrowth(forDays: Int): CurrencyController {
+        return player.calculateGrowth(forDays)
     }
 
-    fun calculateGrowth(oldGrowthData: GrowthData): GrowthData {
+    fun calculateGrowth(oldGrowthData: CurrencyController): CurrencyController {
         return player.getGrowthData(oldGrowthData)
     }
 
-    fun currentGrowth(): GrowthData {
-        return player.overallGrowthData.clone()
+    fun currentGrowth(): CurrencyController {
+        return player.currencyController
     }
 }
