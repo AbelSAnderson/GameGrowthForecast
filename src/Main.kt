@@ -1,7 +1,7 @@
 import abstractDate.AbstractDateController
-import abstractDate.RealDateController
-import growth.ExperienceModifier
-import growth.GrowthController
+import growth.*
+import kotlin.math.floor
+import kotlin.math.ln
 
 /**
  * @author Abel Anderson
@@ -12,13 +12,33 @@ import growth.GrowthController
 fun main() {
 
     /*
-    Experience Modifier: This will determine how quickly the user levels up & how much experience they need to level up.
-    For now, you can only put in a Double as the XPGrowthPerLevel, resulting in a flat curve, but I plan to change that soon.
-    */
-    val experienceModifier = ExperienceModifier(20.0, 1.2, 50.0)
+    Create GrowthExpressions for the Currencies you will be allowing the GrowthController to have.
+    GrowthExpressions have one parameter - The function you want to run whenever date growth is simulated
+    The Function takes on the form (currencyController: CurrencyController, days: Int) -> Double
 
-    //GrowthController will handle the Player's growth - For now, all you need to pass it is the exModifier, and it will work it's magic
-    val growthController = GrowthController(experienceModifier)
+    Currency Controller will hold all the currencies you add to the GrowthController.
+    You can use currencyController.getCurrencyValue(currencyName: String) to grab whatever currency you want to use in your calculations
+
+    A Simple Experience & Leveling System is demonstrated here
+    */
+    val xpGrowthExpression = GrowthExpression { currencyController: CurrencyController, days: Int -> 20.0 * days }
+    val levelGrowthExpression = GrowthExpression { currencyController: CurrencyController, days: Int ->
+        floor(ln(currencyController.getCurrencyValue("xp") / 15) / ln(1.2)) - currencyController.getCurrencyValue("level")
+    }
+
+    /*
+    CurrencySystems takes in two parameters: The Currency, and the Growth Expression that we created above.
+    Currency takes in two parameters as well: The currency name, and the initial value of the currency (as a Double)
+    You can add an optional third parameter to Currency: displayDouble which lets you see the currency as a Double
+    */
+    val xpCurrencySystem = CurrencySystem(Currency("xp", 0.0), xpGrowthExpression)
+    val levelCurrencySystem = CurrencySystem(Currency("level", 1.0), levelGrowthExpression)
+
+    /*
+    The GrowthController takes in a mutable list of CurrencySystems as it's only parameter
+    It will run any calculations that are needed in your dateController
+    */
+    val growthController = GrowthController(mutableListOf(xpCurrencySystem, levelCurrencySystem))
 
     /*
     The AbstractDateController runs simulations for periods of time determined by the list you pass it.
@@ -40,5 +60,5 @@ fun main() {
     Alternative to Using AbstractDateController. This will simple perform calculations over a whole year.
     You can also choose whether to show weekly growth & how many year to repeat it for.
     */
-    RealDateController().performGrowth(growthController, false, 2)
+    //RealDateController().performGrowth(growthController, false, 2)
 }

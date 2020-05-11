@@ -1,32 +1,31 @@
 package growth
 
-class Player(private val experienceModifier: ExperienceModifier) {
+class Player(private val currencySystems: MutableList<CurrencySystem>) {
 
-    var overallGrowthData: GrowthData = GrowthData(experienceModifier.firstLevelXP.toInt())
+    val currencyController: CurrencyController = CurrencyController(mutableListOf())
 
-    fun simulateGrowth(forDays: Double): GrowthData {
+    init {
+        //New HashMap of values
+        val attributeList: HashMap<String, Currency> = hashMapOf()
 
-        //Calculate the Experience gained
-        val experienceGained = experienceModifier.calculateXP(forDays)
+        //Grab all the key & values
+        currencySystems.forEach {
+            attributeList[it.currency.name] = it.currency
+        }
 
-        //Save the old Growth Data
-        val oldGrowthData = overallGrowthData.clone()
-
-        //Update the Player Growth Data
-        updatePlayerGrowth(experienceGained)
-
-        return overallGrowthData.createGrowthData(oldGrowthData)
+        //Add the new attributes
+        currencyController.addCurrencies(attributeList)
     }
 
-    private fun updatePlayerGrowth(experienceGained: Int) {
-        overallGrowthData.totalExperience += experienceGained
-        overallGrowthData.currentLevel = experienceModifier.calculateLevel(overallGrowthData.totalExperience.toDouble())
-        overallGrowthData.experienceTillNextLevel = experienceModifier.calculateNextLevelXP(overallGrowthData.totalExperience.toDouble(), overallGrowthData.currentLevel.toDouble()).toInt()
-        overallGrowthData.levelsGained = overallGrowthData.currentLevel - 1
-        overallGrowthData.experienceGained = overallGrowthData.totalExperience
+    fun calculateGrowth(days: Int): CurrencyController {
+        currencySystems.forEach {
+            it.calculateGrowth(currencyController, days)
+        }
+
+        return currencyController
     }
 
-    fun getGrowthData(oldGrowthData: GrowthData): GrowthData {
-        return overallGrowthData.createGrowthData(oldGrowthData)
+    fun getGrowthData(oldGrowthData: CurrencyController): CurrencyController {
+        return currencyController.calculateGrowth(oldGrowthData)
     }
 }

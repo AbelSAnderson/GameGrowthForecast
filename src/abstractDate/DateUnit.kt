@@ -1,7 +1,6 @@
 package abstractDate
 
 import growth.GrowthController
-import growth.GrowthData
 
 /**
  * Parent Class for DateComposite & DateLeaf
@@ -14,6 +13,4 @@ import growth.GrowthData
  * @see DateComposite
  * @see DateLeaf
  */
-internal abstract class DateUnit(private val growthController: GrowthController) {
-    var growthData: GrowthData? = null
-}
+internal abstract class DateUnit(private val growthController: GrowthController)

@@ -29,7 +29,7 @@ class AbstractDateController(var growthPeriod: MutableList<Int>) {
             println("\n\n****** Set ${i + 1} of $repeatFor Started ******\n\n")
 
             if(growthPeriod.size > 1) {
-                DateComposite(growthPeriod, growthController)
+                DateComposite(growthController, growthPeriod)
             } else {
                 DateLeaf(growthController, growthPeriod.first())
             }
