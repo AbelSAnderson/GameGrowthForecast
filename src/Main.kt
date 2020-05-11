@@ -1,5 +1,6 @@
 import abstractDate.AbstractDateController
 import growth.*
+import kotlin.math.floor
 import kotlin.math.ln
 
 /**
@@ -10,15 +11,33 @@ import kotlin.math.ln
  */
 fun main() {
 
+    /*
+    Create GrowthExpressions for the Currencies you will be allowing the GrowthController to have.
+    GrowthExpressions have one parameter - The function you want to run whenever date growth is simulated
+    The Function takes on the form (currencyController: CurrencyController, days: Int) -> Double
+
+    Currency Controller will hold all the currencies you add to the GrowthController.
+    You can use currencyController.getCurrencyValue(currencyName: String) to grab whatever currency you want to use in your calculations
+
+    A Simple Experience & Leveling System is demonstrated here
+    */
     val xpGrowthExpression = GrowthExpression { currencyController: CurrencyController, days: Int -> 20.0 * days }
     val levelGrowthExpression = GrowthExpression { currencyController: CurrencyController, days: Int ->
-        ln(currencyController.getCurrencyValue("xp") / 15) / ln(1.2) - currencyController.getCurrencyValue("level")
+        floor(ln(currencyController.getCurrencyValue("xp") / 15) / ln(1.2)) - currencyController.getCurrencyValue("level")
     }
 
+    /*
+    CurrencySystems takes in two parameters: The Currency, and the Growth Expression that we created above.
+    Currency takes in two parameters as well: The currency name, and the initial value of the currency (as a Double)
+    You can add an optional third parameter to Currency: displayDouble which lets you see the currency as a Double
+    */
     val xpCurrencySystem = CurrencySystem(Currency("xp", 0.0), xpGrowthExpression)
     val levelCurrencySystem = CurrencySystem(Currency("level", 1.0), levelGrowthExpression)
 
-
+    /*
+    The GrowthController takes in a mutable list of CurrencySystems as it's only parameter
+    It will run any calculations that are needed in your dateController
+    */
     val growthController = GrowthController(mutableListOf(xpCurrencySystem, levelCurrencySystem))
 
     /*
