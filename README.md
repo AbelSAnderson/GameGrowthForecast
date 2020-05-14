@@ -1,2 +1,2 @@
 # GameGrowthForecast
- A simple forecaster, to see player growth statistics.
+ A simple forecaster, to see player Growth statistics.

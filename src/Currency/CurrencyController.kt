@@ -1,4 +1,4 @@
-package growth
+package Currency
 
 class CurrencyController(initialCurrencies: MutableList<Currency> = mutableListOf()): Cloneable {
 
