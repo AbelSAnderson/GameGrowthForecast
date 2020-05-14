@@ -1,4 +1,7 @@
-package growth
+package Growth
+
+import Currency.CurrencyController
+import Currency.CurrencySystem
 
 class GrowthController(currencySystems: MutableList<CurrencySystem>) {
 

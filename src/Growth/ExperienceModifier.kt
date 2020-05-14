@@ -1,4 +1,4 @@
-package growth
+package Growth
 
 import kotlin.math.floor
 import kotlin.math.ln

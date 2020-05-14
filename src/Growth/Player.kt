@@ -1,8 +1,13 @@
-package growth
+package Growth
+
+import Currency.Currency
+import Currency.CurrencyController
+import Currency.CurrencySystem
 
 class Player(private val currencySystems: MutableList<CurrencySystem>) {
 
-    val currencyController: CurrencyController = CurrencyController(mutableListOf())
+    val currencyController: CurrencyController =
+        CurrencyController(mutableListOf())
 
     init {
         //New HashMap of values

@@ -1,4 +1,6 @@
-package growth
+package Currency
+
+import Growth.GrowthExpression
 
 class CurrencySystem(
     val currency: Currency,

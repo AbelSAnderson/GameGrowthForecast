@@ -1,4 +1,4 @@
-package growth
+package Growth
 
 class GrowthData(var experienceTillNextLevel: Int) : Cloneable {
 
