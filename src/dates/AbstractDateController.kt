@@ -1,6 +1,6 @@
-package Dates
+package dates
 
-import Growth.GrowthController
+import growth.GrowthController
 
 /**
  * Lets you perform growth over an abstract amount of time. The amount of time you want to perform growth over can be specified in the growthRateList param.

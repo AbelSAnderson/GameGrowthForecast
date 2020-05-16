@@ -1,6 +1,6 @@
-package Growth
+package growth
 
-import Currency.CurrencyController
+import currency.CurrencyController
 
 class GrowthExpression(private val growthFunction: (CurrencyController, Int) -> Double) {
 

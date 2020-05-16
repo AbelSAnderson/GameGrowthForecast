@@ -1,6 +1,6 @@
-package Dates
+package dates
 
-import Growth.GrowthController
+import growth.GrowthController
 
 /**
  * Parent Class for DateComposite & DateLeaf

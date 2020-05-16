@@ -1,6 +1,6 @@
-package Dates
+package dates
 
-import Growth.GrowthController
+import growth.GrowthController
 
 /**
  * Uses the Composite Pattern to calculate growth over a set amount of time.
