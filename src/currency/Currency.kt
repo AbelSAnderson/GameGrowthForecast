@@ -1,13 +1,15 @@
-package growth
+package currency
 
+import growth.GrowthExpression
 import kotlin.math.roundToInt
 
-class Currency(val name: String, var currentValue: Double, private val showDouble: Boolean = false): Cloneable {
-    var oldValue: Double = currentValue
+class Currency(val name: String, var currentValue: Double, private val growthExpression: GrowthExpression, private val showDouble: Boolean = false): Cloneable {
+    private var oldValue: Double = currentValue
 
-    fun updateCurrency(value: Double) {
+    fun calculateGrowth(currencyController: CurrencyController, days: Int) {
+        val newCurrencyValue = growthExpression.runCalculation(currencyController, days)
         oldValue = currentValue
-        currentValue += value
+        currentValue += newCurrencyValue
     }
 
     fun calculateChanges(oldCurrency: Currency): Currency {
@@ -16,13 +18,13 @@ class Currency(val name: String, var currentValue: Double, private val showDoubl
     }
 
     override fun toString(): String {
-        if(showDouble) {
-            return "Player $name\n" +
+        return if(showDouble) {
+            "Player $name\n" +
                     "Old Value: $oldValue\n" +
                     "$name(s) Gained: ${currentValue - oldValue}\n" +
                     "Currency Value: $currentValue"
         } else {
-            return "Player $name\n" +
+            "Player $name\n" +
                     "Old Value: ${oldValue.roundToInt()}\n" +
                     "$name(s) Gained: ${(currentValue - oldValue).roundToInt()}\n" +
                     "Currency Value: ${currentValue.roundToInt()}"

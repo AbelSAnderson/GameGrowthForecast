@@ -1,4 +1,4 @@
-package growth
+package currency
 
 class CurrencyController(initialCurrencies: MutableList<Currency> = mutableListOf()): Cloneable {
 
@@ -11,15 +11,21 @@ class CurrencyController(initialCurrencies: MutableList<Currency> = mutableListO
     }
 
     fun getCurrency(currencyName: String): Currency {
-        return currencies[currencyName] ?: Currency("Error", -1.0)
+        return currencies[currencyName] ?: throw NoSuchElementException("Currency Could not be found - Please check the currency name you provided.")
     }
 
     fun getCurrencyValue(currencyName: String): Double {
-        return currencies[currencyName]?.currentValue ?: -1.0
+        return currencies[currencyName]?.currentValue ?: throw NoSuchElementException("Currency Could not be found - Please check the currency name you provided.")
     }
 
     fun addCurrencies(newCurrencies: HashMap<String, Currency>) {
         currencies.putAll(newCurrencies)
+    }
+
+    fun calculateGrowth(days: Int) {
+        currencies.forEach {
+            it.value.calculateGrowth(this, days)
+        }
     }
 
     fun calculateGrowth(oldCurrencyController: CurrencyController): CurrencyController {
@@ -36,8 +42,6 @@ class CurrencyController(initialCurrencies: MutableList<Currency> = mutableListO
         currencies.forEach {
             summaryString += "\n${it.value}\n"
         }
-
-
 
         return summaryString
     }

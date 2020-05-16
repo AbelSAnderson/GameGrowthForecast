@@ -1,18 +1,21 @@
 package growth
 
-class GrowthController(currencySystems: MutableList<CurrencySystem>) {
+import currency.Currency
+import currency.CurrencyController
 
-    private val player = Player(currencySystems)
+class GrowthController(currencies: MutableList<Currency>) {
+    private val currencyController: CurrencyController = CurrencyController(currencies)
 
-    fun calculateGrowth(forDays: Int): CurrencyController {
-        return player.calculateGrowth(forDays)
+    fun calculateGrowth(days: Int): CurrencyController {
+        currencyController.calculateGrowth(days)
+        return currencyController
     }
 
     fun calculateGrowth(oldGrowthData: CurrencyController): CurrencyController {
-        return player.getGrowthData(oldGrowthData)
+        return currencyController.calculateGrowth(oldGrowthData)
     }
 
     fun currentGrowth(): CurrencyController {
-        return player.currencyController
+        return currencyController
     }
 }

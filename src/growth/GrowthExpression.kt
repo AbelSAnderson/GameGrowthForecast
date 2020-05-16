@@ -1,5 +1,7 @@
 package growth
 
+import currency.CurrencyController
+
 class GrowthExpression(private val growthFunction: (CurrencyController, Int) -> Double) {
 
     fun runCalculation(currencyController: CurrencyController, days: Int) : Double {
