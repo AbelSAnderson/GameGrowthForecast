@@ -1,5 +1,5 @@
-import currency.Currency
-import currency.CurrencyController
+import systems.CurrencySystem
+import systems.SystemController
 import dates.RealDateController
 import growth.GrowthController
 import growth.GrowthExpression
@@ -23,9 +23,9 @@ fun main() {
 
     A Simple Experience & Leveling System is demonstrated here.
     */
-    val xpGrowthExpression = GrowthExpression { currencyController: CurrencyController, days: Int -> 20.0 * days }
-    val levelGrowthExpression = GrowthExpression { currencyController: CurrencyController, days: Int ->
-        floor(ln(currencyController.getCurrencyValue("xp") / 15) / ln(1.2)) - currencyController.getCurrencyValue("level")
+    val xpGrowthExpression = GrowthExpression { systemController: SystemController, days: Int -> 20.0 * days }
+    val levelGrowthExpression = GrowthExpression { systemController: SystemController, days: Int ->
+        floor(ln(systemController.getCurrencyValue("xp") / 15) / ln(1.2)) - systemController.getCurrencyValue("level")
     }
 
     /*
@@ -35,8 +35,8 @@ fun main() {
 
         (Notice that I set the xp value to 1, not 0 - this is because you cannot log 0. I will probably create a check for this problem in a later version.).
     */
-    val xpCurrency = Currency("xp", 1.0, xpGrowthExpression)
-    val levelCurrency = Currency("level", 1.0, levelGrowthExpression)
+    val xpCurrency = CurrencySystem("xp", 1.0, xpGrowthExpression)
+    val levelCurrency = CurrencySystem("level", 1.0, levelGrowthExpression)
 
     /*
     The GrowthController takes in a mutable list of CurrencySystems as it's only parameter

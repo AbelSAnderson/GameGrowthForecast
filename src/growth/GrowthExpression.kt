@@ -1,10 +1,10 @@
 package growth
 
-import currency.CurrencyController
+import systems.SystemController
 
-class GrowthExpression(private val growthFunction: (CurrencyController, Int) -> Double) {
+class GrowthExpression(private val growthFunction: (SystemController, Int) -> Double) {
 
-    fun runCalculation(currencyController: CurrencyController, days: Int) : Double {
-        return growthFunction(currencyController, days)
+    fun runCalculation(systemController: SystemController, days: Int) : Double {
+        return growthFunction(systemController, days)
     }
 }
