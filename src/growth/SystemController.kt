@@ -1,4 +1,6 @@
-package systems
+package growth
+
+import systems.System
 
 class SystemController(initialSystems: MutableList<System> = mutableListOf()) : Cloneable {
 
@@ -9,21 +11,6 @@ class SystemController(initialSystems: MutableList<System> = mutableListOf()) : 
         initialSystems.forEach {
             systems[it.name] = it
         }
-    }
-
-    fun getCurrency(currencyName: String): CurrencySystem {
-        return (systems[currencyName]
-            ?: throw NoSuchElementException("Currency could not be found - Please check the currency name you provided.")) as CurrencySystem
-    }
-
-    fun getCurrencyValue(currencyName: String): Double {
-        return ((systems[currencyName]
-            ?: throw NoSuchElementException("Currency could not be found - Please check the currency name you provided.")) as CurrencySystem).value
-    }
-
-    fun getSystem(systemName: String): System {
-        return systems[systemName]
-            ?: throw NoSuchElementException("System could not be found - Please check the system name you provided")
     }
 
     fun calculateGrowth(days: Int) {
@@ -58,5 +45,13 @@ class SystemController(initialSystems: MutableList<System> = mutableListOf()) : 
         systems.forEach { newCurrencyController.systems[it.key] = it.value.clone() }
 
         return newCurrencyController
+    }
+
+    fun getSystem(systemName: String): System {
+        return systems[systemName] ?: throw NoSuchElementException("System could not be found - Please check the system name you provided")
+    }
+
+    fun getSystemValue(systemName: String): Number {
+        return getSystem(systemName).systemValue.currentValue
     }
 }

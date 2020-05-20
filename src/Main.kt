@@ -1,10 +1,10 @@
-import systems.CurrencySystem
-import systems.SystemController
 import dates.RealDateController
 import growth.GrowthController
 import growth.GrowthExpression
-import kotlin.math.floor
-import kotlin.math.ln
+import growth.SystemController
+import systems.LevelSystem
+import systems.PrestigeSystem
+import systems.Value
 
 /**
  * @author Abel Anderson
@@ -14,35 +14,49 @@ import kotlin.math.ln
 fun main() {
 
     /*
-    Create GrowthExpressions for the Currencies you will be allowing the GrowthController to have.
+    Create GrowthExpressions for the Systems you will be allocating the GrowthController to have.
     GrowthExpressions have one parameter - The function you want to run whenever date growth is simulated.
     The Function takes on the form (currencyController: CurrencyController, days: Int) -> Double.
 
-    Currency Controller will hold all the currencies you add to the GrowthController.
+    The SystemController will hold all the systems you add to the GrowthController.
     You can use currencyController.getCurrencyValue(currencyName: String) to grab whatever currency you want to use in your calculations.
 
-    A Simple Experience & Leveling System is demonstrated here.
+    A simple Leveling & Prestige System is demonstrated here.
     */
-    val xpGrowthExpression = GrowthExpression { systemController: SystemController, days: Int -> 20.0 * days }
-    val levelGrowthExpression = GrowthExpression { systemController: SystemController, days: Int ->
-        floor(ln(systemController.getCurrencyValue("xp") / 15) / ln(1.2)) - systemController.getCurrencyValue("level")
+    val xpGrowthRate = GrowthExpression { systemController: SystemController, days: Int ->
+        20.0 * days * (0.2 * systemController.getSystemValue("prestige").toDouble())
+    }
+    val levelGrowthRate = GrowthExpression { systemController: SystemController, days: Int ->
+        1.2
+    }
+
+    val prestigeCurrencyGrowthRate = GrowthExpression { systemController: SystemController, days: Int ->
+        0.5 * systemController.getSystemValue("level").toDouble()
     }
 
     /*
-        Here we create your currencies with the Growth Expressions we made earlier.
-        Currency takes in a couple values - name: The name of the Currency, currentValue: The Starting value of the Currency, and GrowthExpression: The GrowthExpression that defines the growth of the Currency.
+        Here we create your systems with the Growth Expressions we made earlier.
+        CurrencySystem takes in a couple values - name: The name of the Currency, currentValue: The Starting value of the Currency, and GrowthExpression: The GrowthExpression that defines the growth of the Currency.
         It has one optional value - showDouble - This determines whether the currency is displayed as a double. This is automatically set to false.
 
-        (Notice that I set the xp value to 1, not 0 - this is because you cannot log 0. I will probably create a check for this problem in a later version.).
+        LevelSystem has a few more values - name, level: The starting level, growthRate: How much xp required for each level increases each level, experienceCurrency: The currency that increases the level, and firstLevelExperience: The experience needed for the first level
+
+        Please note that I use non-zero values for value on systems - This is because zero values may cause bugs in the program. This will be fixed soon - for now just don't use zero in systems.
     */
-    val xpCurrency = CurrencySystem("xp", 1.0, xpGrowthExpression)
-    val levelCurrency = CurrencySystem("level", 1.0, levelGrowthExpression)
+    val xpCurrency = systems.CurrencySystem("xp", Value(0.1), xpGrowthRate)
+    val levelSystem = LevelSystem("level", Value(1), levelGrowthRate, xpCurrency, 15)
+
+    val prestigeCurrency = systems.CurrencySystem("gems", Value(0.1), prestigeCurrencyGrowthRate)
+    val prestigeSystem = PrestigeSystem("prestige", prestigeCurrency, mutableListOf(levelSystem), 80)
 
     /*
     The GrowthController takes in a mutable list of CurrencySystems as it's only parameter
     It will run any calculations that are needed in your dateController
+
+    Notice that xpCurrency is not included in the GrowthController - This is because it's stats is already managed by the LevelSystem you created earlier.
+    If you wanted to use xpCurrency in any of your calculations, you would simply access the level currency & from there access the xpCurrency
     */
-    val growthController = GrowthController(mutableListOf(xpCurrency, levelCurrency))
+    val growthController = GrowthController(mutableListOf(levelSystem, prestigeSystem))
 
     /*
     The AbstractDateController runs simulations for periods of time determined by the list you pass it.

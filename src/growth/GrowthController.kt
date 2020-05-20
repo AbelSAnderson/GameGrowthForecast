@@ -1,10 +1,10 @@
 package growth
 
 import systems.System
-import systems.SystemController
 
 class GrowthController(systems: MutableList<System>) {
-    private val systemController: SystemController = SystemController(systems)
+    private val systemController: SystemController =
+        SystemController(systems)
 
     fun calculateGrowth(days: Int): SystemController {
         systemController.calculateGrowth(days)

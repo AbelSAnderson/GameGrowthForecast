@@ -1,16 +1,16 @@
 package systems
 
 import growth.GrowthExpression
+import growth.SystemController
 
 class LevelSystem(
     override val name: String,
-    level: Int,
+    override var systemValue: Value,
     growthRate: GrowthExpression,
-    experienceCurrency: CurrencySystem,
+    experienceCurrency: System,
     firstLevelExperience: Int
 ) :
     Level(
-        level,
         growthRate,
         experienceCurrency,
         firstLevelExperience
@@ -22,23 +22,25 @@ class LevelSystem(
         calculateLevel(systemController, days)
     }
 
-    override fun calculateChanges(oldSystem: System): System {
+    override fun calculateChanges(oldSystem: System): LevelSystem {
         if (oldSystem !is LevelSystem) throw ClassCastException("Provided Class: ${oldSystem.javaClass.name} cannot be cast to LevelSystem")
 
-        oldSystem.level = level
+        oldSystem.systemValue.currentValue = systemValue.currentValue
         experienceCurrency.calculateChanges(oldSystem.experienceCurrency)
         return oldSystem
     }
 
     override fun resetSystem() {
-        level = 0
+        systemValue.currentValue = 0
+    }
+
+    override fun clone(): LevelSystem {
+        return LevelSystem(name, systemValue, growthRate, experienceCurrency.clone(), firstLevelExperience)
     }
 
     override fun toString(): String {
         return "Level $name\n" +
-                "Old Level: $oldLevel\n" +
-                "level(s) Gained: ${level - oldLevel}\n" +
-                "Current Level: $level" +
+                "Current Level: $systemValue\n\n" +
                 experienceCurrency
     }
 }
