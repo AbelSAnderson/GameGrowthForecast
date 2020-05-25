@@ -1,4 +1,4 @@
-package systems
+package systems.helpers
 
 class Value(
     value: Number
@@ -22,7 +22,7 @@ class Value(
         return currentValue.toString()
     }
 
-    override fun clone(): Value {
+    public override fun clone(): Value {
         return super.clone() as Value
     }
 }

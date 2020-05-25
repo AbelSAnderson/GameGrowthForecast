@@ -4,7 +4,7 @@ import growth.GrowthExpression
 import growth.SystemController
 import systems.LevelSystem
 import systems.PrestigeSystem
-import systems.Value
+import systems.helpers.Value
 
 /**
  * @author Abel Anderson
@@ -46,7 +46,8 @@ fun main() {
     val xpCurrency = systems.CurrencySystem("xp", Value(0.1), xpGrowthRate)
     val levelSystem = LevelSystem("level", Value(1), levelGrowthRate, xpCurrency, 15)
 
-    val prestigeCurrency = systems.CurrencySystem("gems", Value(0.1), prestigeCurrencyGrowthRate)
+    val prestigeCurrency = systems.CurrencySystem("gems",
+        Value(0.1), prestigeCurrencyGrowthRate)
     val prestigeSystem = PrestigeSystem("prestige", prestigeCurrency, mutableListOf(levelSystem), 80)
 
     /*

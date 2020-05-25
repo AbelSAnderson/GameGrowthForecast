@@ -1,47 +1,35 @@
 package systems
 
 import growth.SystemController
-import java.lang.ClassCastException
+import systems.helpers.Value
+import systems.interfaces.SubSystem
+import systems.interfaces.System
 
 class PrestigeSystem(
     override val name: String,
-    val prestigeCurrency: System,
+    override val innerSystem: System,
     private val resetSystems: MutableList<System>,
     private val resetAfterDays: Int
-    ) : System {
+    ) : System, SubSystem {
 
     override var systemValue: Value = Value(0)
 
     override fun performGrowth(systemController: SystemController, days: Int, totalDays: Int) {
         if ((totalDays % resetAfterDays) > days) {
             systemValue++
-            prestigeCurrency.performGrowth(systemController, days, totalDays)
+            innerSystem.performGrowth(systemController, days, totalDays)
             resetSystems.forEach { it.resetSystem() }
         }
     }
 
-    override fun calculateChanges(oldSystem: System): PrestigeSystem {
-        if (oldSystem !is PrestigeSystem) throw ClassCastException("Provided Class: ${oldSystem.javaClass.name} cannot be cast to PrestigeSystem")
-
-        prestigeCurrency.calculateChanges(oldSystem.prestigeCurrency)
-
-        return oldSystem
-    }
-
     override fun resetSystem() {
         systemValue.currentValue = 0
-        prestigeCurrency.resetSystem()
-    }
-
-    override fun clone(): PrestigeSystem {
-        val clone = PrestigeSystem(name, prestigeCurrency.clone() as CurrencySystem, resetSystems, resetAfterDays)
-        clone.systemValue = systemValue
-        return clone
+        innerSystem.resetSystem()
     }
 
     override fun toString(): String {
         return "Prestige System $name\n" +
                 "PrestigeCount: $systemValue\n\n" +
-                prestigeCurrency
+                innerSystem
     }
 }

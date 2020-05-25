@@ -1,8 +1,9 @@
 package growth
 
-import systems.System
+import systems.helpers.SystemInfoShell
+import systems.interfaces.System
 
-class SystemController(initialSystems: MutableList<System> = mutableListOf()) : Cloneable {
+class SystemController(initialSystems: MutableList<System> = mutableListOf()) {
 
     private var systems: HashMap<String, System> = hashMapOf()
     private var totalDays: Int = 0
@@ -21,12 +22,23 @@ class SystemController(initialSystems: MutableList<System> = mutableListOf()) : 
         }
     }
 
-    fun calculateGrowth(oldSystemController: SystemController): SystemController {
-        oldSystemController.systems.forEach {
-            systems[it.key]?.calculateChanges(it.value)
+    fun getSystem(systemName: String): System {
+        return systems[systemName]
+            ?: throw NoSuchElementException("System could not be found - Please check the system name you provided")
+    }
+
+    fun getSystemValue(systemName: String): Number {
+        return getSystem(systemName).systemValue.currentValue
+    }
+
+    fun getSystemsShells(): MutableList<SystemInfoShell> {
+        val systemShells = mutableListOf<SystemInfoShell>()
+
+        systems.forEach {
+            systemShells.add(it.value.convertToShell())
         }
 
-        return oldSystemController
+        return systemShells
     }
 
     override fun toString(): String {
@@ -37,21 +49,5 @@ class SystemController(initialSystems: MutableList<System> = mutableListOf()) : 
         }
 
         return summaryString
-    }
-
-    public override fun clone(): SystemController {
-        val newCurrencyController = SystemController()
-
-        systems.forEach { newCurrencyController.systems[it.key] = it.value.clone() }
-
-        return newCurrencyController
-    }
-
-    fun getSystem(systemName: String): System {
-        return systems[systemName] ?: throw NoSuchElementException("System could not be found - Please check the system name you provided")
-    }
-
-    fun getSystemValue(systemName: String): Number {
-        return getSystem(systemName).systemValue.currentValue
     }
 }

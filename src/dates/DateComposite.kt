@@ -22,7 +22,7 @@ internal class DateComposite(growthController: GrowthController, growthPeriod: M
         val totalDayGroups = totalDays / growthPeriod.first()
 
         //Grab the Current Growth
-        val currentGrowth = growthController.currentGrowth().clone()
+        val currentGrowth = growthController.currentGrowth()
 
         //Loop through the Days and add them to the list
         if (growthPeriod.size > 1) {
