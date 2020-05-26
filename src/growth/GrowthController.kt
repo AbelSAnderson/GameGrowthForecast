@@ -1,21 +1,22 @@
 package growth
 
-import currency.Currency
-import currency.CurrencyController
+import systems.helpers.SystemInfoShellSave
+import systems.interfaces.System
 
-class GrowthController(currencies: MutableList<Currency>) {
-    private val currencyController: CurrencyController = CurrencyController(currencies)
+class GrowthController(systems: MutableList<System>) {
+    private val systemController: SystemController = SystemController(systems)
 
-    fun calculateGrowth(days: Int): CurrencyController {
-        currencyController.calculateGrowth(days)
-        return currencyController
+    fun calculateGrowth(days: Int): SystemController {
+        systemController.calculateGrowth(days)
+        return systemController
     }
 
-    fun calculateGrowth(oldGrowthData: CurrencyController): CurrencyController {
-        return currencyController.calculateGrowth(oldGrowthData)
+    fun calculateGrowth(systemInfoShellSave: SystemInfoShellSave): SystemInfoShellSave {
+        systemInfoShellSave.calculateGrowth(systemController.getSystemsShells())
+        return systemInfoShellSave
     }
 
-    fun currentGrowth(): CurrencyController {
-        return currencyController
+    fun currentGrowth(): SystemInfoShellSave {
+        return SystemInfoShellSave(systemController.getSystemsShells())
     }
 }

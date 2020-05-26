@@ -24,7 +24,7 @@ class RealDateController {
         for (i in 0 until repeatFor) {
             println("\n\n****** Set ${i + 1} of $repeatFor Started ******\n\n")
 
-            val oldGrowth = growthController.currentGrowth().clone()
+            val oldGrowth = growthController.currentGrowth()
 
             for (z in 0 until 12) {
                 if(showPerWeek) {
