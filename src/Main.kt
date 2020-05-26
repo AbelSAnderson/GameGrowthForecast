@@ -2,9 +2,11 @@ import dates.RealDateController
 import growth.GrowthController
 import growth.GrowthExpression
 import growth.SystemController
+import systems.CurrencySystem
 import systems.LevelSystem
 import systems.PrestigeSystem
 import systems.helpers.Value
+import kotlin.system.exitProcess
 
 /**
  * @author Abel Anderson
@@ -12,6 +14,13 @@ import systems.helpers.Value
  * See instructions for using this program below.
  */
 fun main() {
+
+    /*
+    Run Tests on the Program - You can also edit these if you want to try out different Ideas
+    Note that these tests will exit out of the program at the end, so make sure you comment them out if you have anything running in main
+    */
+//    testLevelSystem()
+
 
     /*
     Create GrowthExpressions for the Systems you will be allocating the GrowthController to have.
@@ -34,6 +43,8 @@ fun main() {
         0.5 * systemController.getSystemValue("level").toDouble()
     }
 
+//    val genericCurrencyGrowthRate = GrowthExpression {systemController, days -> 20.0 * days }
+
     /*
         Here we create your systems with the Growth Expressions we made earlier.
         CurrencySystem takes in a couple values - name: The name of the Currency, currentValue: The Starting value of the Currency, and GrowthExpression: The GrowthExpression that defines the growth of the Currency.
@@ -46,9 +57,12 @@ fun main() {
     val xpCurrency = systems.CurrencySystem("xp", Value(0.1), xpGrowthRate)
     val levelSystem = LevelSystem("level", Value(1), levelGrowthRate, xpCurrency, 15)
 
-    val prestigeCurrency = systems.CurrencySystem("gems",
-        Value(0.1), prestigeCurrencyGrowthRate)
+    val prestigeCurrency = systems.CurrencySystem(
+        "gems",
+        Value(0.1), prestigeCurrencyGrowthRate
+    )
     val prestigeSystem = PrestigeSystem("prestige", prestigeCurrency, mutableListOf(levelSystem), 80)
+//    val genericCurrency = CurrencySystem("gold", Value(0.1), genericCurrencyGrowthRate)
 
     /*
     The GrowthController takes in a mutable list of CurrencySystems as it's only parameter
@@ -58,6 +72,7 @@ fun main() {
     If you wanted to use xpCurrency in any of your calculations, you would simply access the level currency & from there access the xpCurrency
     */
     val growthController = GrowthController(mutableListOf(levelSystem, prestigeSystem))
+//    val growthController = GrowthController(mutableListOf(genericCurrency))
 
     /*
     The AbstractDateController runs simulations for periods of time determined by the list you pass it.
@@ -80,4 +95,22 @@ fun main() {
     You can also choose whether to show weekly growth & how many year to repeat it for.
     */
     RealDateController().performGrowth(growthController, false, 2)
+}
+
+fun testLevelSystem() {
+    val xpGrowthRate = GrowthExpression { systemController: SystemController, days: Int ->
+        20.0 * days
+    }
+    val levelGrowthRate = GrowthExpression { systemController: SystemController, days: Int ->
+        1.2
+    }
+
+    val xpCurrency = CurrencySystem("xp", Value(0.1), xpGrowthRate)
+    val levelSystem = LevelSystem("level", Value(1), levelGrowthRate, xpCurrency, 15)
+
+    val growthController = GrowthController(mutableListOf(levelSystem))
+
+    RealDateController().performGrowth(growthController, false, 2)
+
+    exitProcess(0)
 }

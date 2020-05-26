@@ -20,7 +20,7 @@ class SystemInfoShellSave(infoShells: MutableList<SystemInfoShell>) {
         var output = ""
 
         savedInfoShells.forEach{
-            output += "$it/n"
+            output += "$it\n"
         }
 
         return output

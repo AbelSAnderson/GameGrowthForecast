@@ -23,13 +23,13 @@ class PrestigeSystem(
     }
 
     override fun resetSystem() {
-        systemValue.currentValue = 0
+        systemValue.currentValue = 0.1
         innerSystem.resetSystem()
     }
 
     override fun toString(): String {
-        return "Prestige System $name\n" +
-                "PrestigeCount: $systemValue\n\n" +
+        return "Prestige System - $name\n" +
+                "$systemValue\n\n" +
                 innerSystem
     }
 }

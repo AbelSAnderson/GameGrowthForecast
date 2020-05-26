@@ -22,15 +22,15 @@ class LevelSystem(
     override fun performGrowth(systemController: SystemController, days: Int, totalDays: Int) {
         innerSystem.performGrowth(systemController, days, totalDays)
 
-        calculateLevel(systemController, days)
+        systemValue.currentValue = calculateLevel(systemController, days)
     }
 
     override fun resetSystem() {
-        systemValue.currentValue = 0
+        systemValue.currentValue = 0.1
     }
 
     override fun toString(): String {
-        return "Level $name\n" +
+        return "Level - $name\n" +
                 "Current Level: $systemValue\n\n" +
                 innerSystem
     }

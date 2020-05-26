@@ -8,9 +8,9 @@ import kotlin.math.floor
 import kotlin.math.ln
 
 abstract class Level(
-    val growthRate: GrowthExpression,
+    private val growthRate: GrowthExpression,
     override val innerSystem: System,
-    val firstLevelExperience: Int
+    private val firstLevelExperience: Int
 ) : SubSystem {
 
     fun calculateLevel(systemController: SystemController, days: Int): Int {

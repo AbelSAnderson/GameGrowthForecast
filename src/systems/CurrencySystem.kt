@@ -14,16 +14,16 @@ open class CurrencySystem(
 
     override fun performGrowth(systemController: SystemController, days: Int, totalDays: Int) {
         val newCurrencyValue = growthRate.runCalculation(systemController, days)
-        systemValue.currentValue = newCurrencyValue
+        systemValue.currentValue = systemValue.currentValue.toDouble() + newCurrencyValue
     }
 
     override fun resetSystem() {
-        systemValue.currentValue = 0
+        systemValue.currentValue = 0.1
     }
 
     override fun toString(): String {
-        return "Currency $name\n" +
-                    "Currency value: $systemValue"
+        return "Currency - $name\n" +
+                "$systemValue\n"
 
     }
 }

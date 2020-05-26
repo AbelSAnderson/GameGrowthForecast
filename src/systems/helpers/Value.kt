@@ -9,7 +9,7 @@ class Value(
 
     var currentValue: Number = value
         set(value) {
-            _oldValue = value
+            _oldValue = field
             field = value
         }
 
@@ -19,7 +19,8 @@ class Value(
     }
 
     override fun toString(): String {
-        return currentValue.toString()
+        return "Current Value: ${currentValue.toInt()}\n" +
+                "Old Value: ${oldValue.toInt()}"
     }
 
     public override fun clone(): Value {

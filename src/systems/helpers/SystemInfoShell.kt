@@ -4,8 +4,8 @@ import java.security.InvalidParameterException
 
 class SystemInfoShell(
     val name: String,
-    val systemValue: Value,
-    val systemCurrency: SystemInfoShell?
+    private val systemValue: Value,
+    private val systemCurrency: SystemInfoShell?
 ) {
 
     fun calculateGrowth(fromShell: SystemInfoShell) {
@@ -21,7 +21,7 @@ class SystemInfoShell(
         var tempString = "System Name: $name\n" +
                 "$systemValue\n"
 
-        if (systemCurrency != null) tempString += "Inner Currency of $name: \n$systemCurrency"
+        if (systemCurrency != null) tempString += "\nInner Currency of $name: \n$systemCurrency"
 
         return tempString
     }
